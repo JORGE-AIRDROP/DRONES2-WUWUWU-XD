@@ -2,10 +2,11 @@
 import time
 from dronekit import connect, VehicleMode, LocationGlobalRelative, Command, LocationGlobal
 from pymavlink import mavutil
+#Esto nos dara la interfaz para que podamos manejar al dron con nuestras flechas y que vaya a la dirección que queramos.
 import Tkinter as tk
 
-
-
+#Este codigo funciona para que el dron obtenga velocidad, posision y aceleracion para que sepa como moverse y en que direcciones, 
+#y que en cierta manera sea "conciente" de su posision relativa a su cuerpo digital y a donde le estamos diciendo que vaya
 def set_velocity_body(vehicle, vx, vy, vz):
     msg = vehicle.message_factory.set_position_target_local_ned_encode(
             0,
@@ -56,7 +57,10 @@ def arm_and_takeoff(TargetAltitude):
             break
 
 
-
+#Toda esta parte del codigo es para controlar el movimiento del dron, y que este reconozca a donde tiene que ir
+#dependiendo de que tecla toquemos, es por esto que unas tienen negativos y otros positivos.
+#Los negativos hacen que vaya izquierda y abajo, y los positivos arriba y a la derecha. al igual que asignar la velocidad.
+#También le damos el valor a la tecla "r" para regrersar a casa.
 def key(event):
     if event.char == event.keysym: #-- standard keys
         if event.keysym == 'r':
@@ -70,18 +74,24 @@ def key(event):
             set_velocity_body(drone,0,-5,0)
         elif event.keysym == 'Right':
             set_velocity_body(drone,0,5,0)
+
 #****************************************************************************
 #   MAIN CODE
 #
 #****************************************************************************
 
+#Esto nos deja conectarnos al dron en Mission Planner 
 drone = connect('127.0.0.1:14551' , wait_ready=True)
 
-# Take off to 10 m altitude
+#Esta parte funciona para decirle al dron que altura queremos.
 arm_and_takeoff(10)
  
-# Read the keyboard with tkinter
+# Aqui utilizamos la funcion de tkinter, para que nos abra la ventana y en esta poder controlar el dron
+#y al momento de presionar la letra "r" el dron regresara a casa.
 root = tk.Tk()
 print(">> Control the drone with the arrow keys. Press r for RTL mode")
 root.bind_all('<Key>', key)
 root.mainloop()
+
+#Y este codigo es para que se cierre el programa.
+drone.close()
