@@ -2,7 +2,7 @@
 import time
 from dronekit import connect, VehicleMode, LocationGlobalRelative, Command, LocationGlobal
 from pymavlink import mavutil
-#Esto nos dara la interfaz para que podamos manejar al dron con nuestras flechas y que vaya a la dirección que queramos.
+#Con esto podremos abrir otra ventana y manejar el dron.
 import Tkinter as tk
 
 #Este codigo funciona para que el dron obtenga velocidad, posision y aceleracion para que sepa como moverse y en que direcciones, 
@@ -19,7 +19,6 @@ def set_velocity_body(vehicle, vx, vy, vz):
             0, 0)
     vehicle.send_mavlink(msg)
     vehicle.flush()
-
 
 #### your code here #####
 def arm_and_takeoff(TargetAltitude):
@@ -56,11 +55,6 @@ def arm_and_takeoff(TargetAltitude):
             print("Altitude reached")
             break
 
-
-#Toda esta parte del codigo es para controlar el movimiento del dron, y que este reconozca a donde tiene que ir
-#dependiendo de que tecla toquemos, es por esto que unas tienen negativos y otros positivos.
-#Los negativos hacen que vaya izquierda y abajo, y los positivos arriba y a la derecha. al igual que asignar la velocidad.
-#También le damos el valor a la tecla "r" para regrersar a casa.
 def key(event):
     if event.char == event.keysym: #-- standard keys
         if event.keysym == 'r':
@@ -74,6 +68,10 @@ def key(event):
             set_velocity_body(drone,0,-5,0)
         elif event.keysym == 'Right':
             set_velocity_body(drone,0,5,0)
+#Toda esta parte del codigo es para controlar el movimiento del dron, y que este reconozca a donde tiene que ir
+#dependiendo de que tecla toquemos, es por esto que unas tienen negativos y otros positivos.
+#Los negativos hacen que vaya izquierda y abajo, y los positivos arriba y a la derecha. al igual que asignar la velocidad.
+#La letra "r" funciona para regresar a casa.
 
 #****************************************************************************
 #   MAIN CODE
